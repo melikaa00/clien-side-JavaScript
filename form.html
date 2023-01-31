@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>JavaScript</title>
+
+	<style>
+		div {
+			margin-top: 10px;
+			font-size: 30px;
+		}
+	</style>
+	<header>
+		<div style="font-size:35px;font-color:Navy;background-color:lightblue;"> User Information
+		</div>
+	</header>
+
+</head>
+
+<body>
+	<form>
+		Enter your Name: <br><input type="text" id="name">
+		<br>
+		Enter your Address: <br> <input type="text" id="address">
+		<br>
+		Enter your Phone Number: <br> <input type="text" id="pnumber">
+		<br>
+		<input type="button" onclick="validate(document.getElementById('name'),document.getElementById('pnumber') )"
+			value="Check Form">
+	</form>
+	<input type="button" onclick="changeColour()" value="Change Colour">
+	<input type="button" onclick="changeFont()" value="Change Font">
+	<br>
+	<br>
+	<form>
+		<textarea name="text" id="textbox" onkeyup="countCharacters()"></textarea>
+		<input type="text" id="counter" style="width:20px">
+		<input type="text" id="lettercounter" style="width:15px">
+	</form>
+	<div>
+		<h5>Favorite Websites</h5>
+		<ul id="favs">
+
+		</ul>
+	</div>
+	<form>
+
+		<input name="textletter" id="URLEnter"></input>
+		<button type="button" onClick="URLAdd()">Add</button>
+
+	</form>
+
+	<div id="URLListDisplay"></div>
+
+	<script>
+		let letters = 0
+		document.addEventListener("DOMContentLoaded", () => {
+
+			createBookmarks()
+		})
+		function checkName(name) {
+			var letterExpression = /^[a-zA-Z]+$/;
+			if (name.value.match(letterExpression)) {
+				return true;
+			} else {
+				alert("You entered a wrong name!!! please try again.")
+				name.focus();
+				return false;
+			}
+
+		}
+
+		function checkPhoneNum(phoneNum) {
+			var numberExpression = /^(1-)?\d{3}-\d{3}-\d{4}$/;
+			if (phoneNum.value.match(numberExpression)) {
+				return true;
+			}
+			else {
+
+				var digExpression = /^(1)?\d{3}\d{3}\d{4}$/;
+				if (phoneNum.value.match(digExpression)) {
+
+					transformNum(phoneNum);
+				}
+				else {
+					alert("You entered a wrong phone number!!! please try again.")
+					phoneNum.focus();
+					return false;
+				}
+			}
+		}
+
+		function validate(name, phoneNum) {
+
+			var isNameValid = checkName(name);
+			var isPhoneNumValid = checkPhoneNum(phoneNum);
+
+		}
+
+		function transformNum(phoneNum) {
+
+			var newPhoneNumber = "";
+
+			for (var i = 0; i < phoneNum.value.length; i++) {
+				if (i == 3 || i == 6) {
+					newPhoneNumber += "-";
+				}
+				newPhoneNumber += phoneNum.value.charAt(i);
+			}
+			document.getElementById("pnumber").value = newPhoneNumber;
+
+		}
+
+
+
+		function countCharacters() {
+			var textArea = document.getElementById("textbox");
+			var characterCounter = document.getElementById("counter");
+
+			var numOfEnteredChars = textArea.value.length;
+			characterCounter.value = numOfEnteredChars;
+
+			countLetters();
+
+		}
+		function createBookmarks() {
+			var favoriteWebsites = ['https://google.com', 'http://google.com', 'https://www.netflix.com'];
+			var ul = document.getElementById("favs");
+			favoriteWebsites.forEach((element) => {
+				var li = document.createElement("li")
+				if (/https\b/g.test(element)) {
+					element = element + '  ✅'
+				} else element = element + '  ❌'
+				li.innerHTML = element
+				ul.appendChild(li)
+			})
+
+		}
+		function charIsLetter(char) {
+			if (typeof char !== 'string') {
+				return false;
+			}
+
+			return /^[a-zA-Z]+$/.test(char);
+		}
+
+		function countLetters() {
+			var textArea = document.getElementById("textbox");
+			var letterCounter = document.getElementById("lettercounter");
+			console.log(textArea.value)
+			var regex = /[a-zA-Z]/g;
+
+			letterCounter.value = textArea.value.match(regex).length;
+		}
+
+
+
+		var URLList = []
+
+
+		function URLAdd() {
+
+			var URLEnter = document.getElementById("URLEnter")
+			var URLListDisplay = document.getElementById("URLListDisplay")
+
+			URLList.push(URLEnter.value);
+			URLEnter.value = ''
+
+			URLListDisplay.innerHTML = ""
+
+			for (var url of URLList) {
+
+				if (url.includes("https")) {
+
+					var secureNode = document.createElement("div");
+
+					secureNode.appendChild(document.createTextNode(url))
+
+					var image = document.createElement("img")
+					image.src = 'https://www.pngitem.com/pimgs/m/735-7359423_file-move-protect-svg-green-padlock-icon-ssl.png'
+					image.style.width = "30px";
+					image.style.height = "30px";
+					secureNode.appendChild(image)
+
+
+					URLListDisplay.appendChild(secureNode)
+
+
+				} else if (url.includes("http")) {
+					var insecureNode = document.createElement("div");
+
+					insecureNode.appendChild(document.createTextNode(url))
+
+					var image2 = document.createElement("img")
+					image2.src = 'https://www.pngitem.com/pimgs/m/103-1035631_file-lock-r-svg-clipart-red-padlock-hd.png'
+					image2.style.width = "30px";
+					image2.style.height = "30px";
+					insecureNode.appendChild(image2)
+
+
+					URLListDisplay.appendChild(insecureNode)
+
+				}
+			}
+
+		}
+
+	</script>
+
+	<script>
+		function changeColour() {
+			document.getElementById("name").style.background = "grey";
+			document.getElementById("address").style.background = "honeydew";
+			document.getElementById("pnumber").style.background = "sandybrown";
+		}
+		function changeFont() {
+			document.getElementById("name").style.textTransform = "capitalize";
+			document.getElementById("address").style.textTransform = "uppercase";
+			document.getElementById("pnumber").style.textTransform = "uppercase"
+		}
+
+
+	</script>
+
+
+</body>
+
+</html>
